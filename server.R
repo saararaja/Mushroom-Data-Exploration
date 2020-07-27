@@ -334,13 +334,13 @@ shinyServer(function(input, output, session) {
                        panel.first = grid(lty = 1))
     }
     #Tree Selection
-    # else {
-    #   tree_plot <- plot(prune_tree$size, prune_tree$dev, xlab = "Number of Nodes",
-    #                     ylab = "Classification Deviance",
-    #                     main = "Training Misclassification Based on Number of Nodes",
-    #                     type = "o", col = "blue",
-    #                     panel.first = grid(lty = 1))
-    # }
+    else {
+      tree_plot <- plot(prune_tree$size, prune_tree$dev, xlab = "Number of Nodes",
+                        ylab = "Classification Deviance",
+                        main = "Training Misclassification Based on Number of Nodes",
+                        type = "o", col = "blue",
+                        panel.first = grid(lty = 1))
+    }
   })
 
 
