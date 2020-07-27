@@ -152,8 +152,8 @@ shinyUI(fluidPage(navbarPage("Mushroom Classification App",
                                                                                 min = 5, max = 50, value = 5, step = 5)
                                                    ),
                                                    conditionalPanel(condition = "input.model =='Classification Tree'",
-                                                                    sliderInput("nodes", "Select Number of Nodes",
-                                                                                min = 2, max = 5, value = 5, step = 1)
+                                                                    sliderInput("nodes", "Select Complexity Parameter",
+                                                                                min = .05, max = .85, value = .05, step = .1)
                                                    )
                                       ),
                                       mainPanel(fluidRow(column(width = 6,

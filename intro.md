@@ -42,7 +42,7 @@ A plot of the classification accuracy from different K values for the number of 
 
 **Classification Tree**  
 
-A plot of the misclassification (deviance) from different numbers of nodes obtained by cross-validation on the train is shown for the user's reference.  The user can select any value of number of nodes, and the full classification tree will be pruned to that specification.  The user can also view the corresponding confusion matrix on the test dataset when the tree is pruned.  The user also has the option to input their own desired values for the predictor variables and predict the mushroom classification for any number of nodes.  They can choose the variable values with the corresponding dropdown menus and click "Make New Prediction" to see the result.
+A plot of the classification accuracy from different complexity parameter (cp) values obtained by cross-validation on the train is shown for the user's reference.  The user can select any value for the complexity parameter, and the full classification tree will be pruned to that specification.  The user can also view the corresponding confusion matrix on the test dataset when the tree is pruned.  The user also has the option to input their own desired values for the predictor variables and predict the mushroom classification for any complexity parameter.  They can choose the variable values with the corresponding dropdown menus and click "Make New Prediction" to see the result.
 
 <br>
 

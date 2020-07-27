@@ -63,8 +63,10 @@ knnFit <- train(class ~., data = Train, method = "knn",
 )
 
 #Fit Classification Tree on Train Set with Cross Validation Results
-tree.fit <- tree(class ~., data = Train)
-prune_tree <- cv.tree(tree.fit, FUN=prune.misclass)
+# Train2 <- as.data.frame(Train)
+# tree.fit <- tree(class ~., data = Train2)
+# prune_tree <- cv.tree(tree.fit, FUN=prune.misclass)
+tree.fit <- train(class ~., data = Train, method = "rpart", trControl = trctrl)
 
 ## Clustering
 #Create dissimilarity matrix using method = gower since categorical data
@@ -335,12 +337,19 @@ shinyServer(function(input, output, session) {
     }
     #Tree Selection
     else {
-      tree_plot <- plot(prune_tree$size, prune_tree$dev, xlab = "Number of Nodes",
-                        ylab = "Classification Deviance",
-                        main = "Training Misclassification Based on Number of Nodes",
+      tree_plot <- plot(tree.fit$results[,1], tree.fit$results[,2], xlab = "Complexity Parameter value",
+                        ylab = "Classification Accuracy",
+                        main = "Training Accuracy Based on Complexity Parameter",
                         type = "o", col = "blue",
                         panel.first = grid(lty = 1))
     }
+    # else {
+    #   tree_plot <- plot(prune_tree$size, prune_tree$dev, xlab = "Number of Nodes",
+    #                     ylab = "Classification Deviance",
+    #                     main = "Training Misclassification Based on Number of Nodes",
+    #                     type = "o", col = "blue",
+    #                     panel.first = grid(lty = 1))
+    # }
   })
 
 
@@ -356,7 +365,12 @@ shinyServer(function(input, output, session) {
 
   #Reactive Tree Fit
   Tree_Fit <- reactive({
-    tree.fit2 <- prune.misclass(tree.fit, best = input$nodes)
+    #tree.fit2 <- prune.misclass(tree.fit, best = input$nodes)
+    treectrl <- trainControl(method = "none")
+    treeFit <- train(class ~., data = Train, method = "rpart",
+                    trControl = treectrl,
+                    tuneGrid=data.frame(cp=input$nodes))
+                    
   })
 
   #Reactive KNN Prediction
@@ -370,7 +384,8 @@ shinyServer(function(input, output, session) {
   Tree_Pred <- reactive({
     treeFit <- Tree_Fit()
     #Predict on the test data set based on model fit
-    treePred <- predict(treeFit, newdata = Test, type="class")
+    #treePred <- predict(treeFit, newdata = Test, type="class")
+    treePred <- predict(treeFit, newdata = Test)
   })
 
   #Confusion Matrix
@@ -399,7 +414,8 @@ shinyServer(function(input, output, session) {
     #Tree
     else {
       treePred <- Tree_Pred()
-      paste0("With # Nodes = ", input$nodes, ", the Misclassification Error rate is: ", round(mean(treePred != Test$class),5), ".")
+      #paste0("With # Nodes = ", input$nodes, ", the Misclassification Error rate is: ", round(mean(treePred != Test$class),5), ".")
+      paste0("With CP = ", input$nodes, ", the Misclassification Error rate is: ", round(mean(treePred != Test$class),5), ".")
     }
   })
 
@@ -448,15 +464,16 @@ shinyServer(function(input, output, session) {
         #Bring in the Tree fit
         treeFit <- Tree_Fit()
         # Make some adjustmusts to Temp column types
-        col_names2 <- names(Temp)
-        Temp[,col_names2] <- lapply(Temp[,col_names2], factor)
+        #col_names2 <- names(Temp)
+        #Temp[,col_names2] <- lapply(Temp[,col_names2], factor)
         #Predict on the user defined data set based on model fit
-        treePred <- predict(treeFit, newdata = Temp, type="class")
+        #treePred <- predict(treeFit, newdata = Temp, type="class")
+        treePred <- predict(treeFit, newdata = Temp)
         #Text
         if (treePred[1]=='p'){
-          text <- paste0("Prediction with # of Nodes = ", input$nodes, ": This mushroom is poisonous")
+          text <- paste0("Prediction with CP = ", input$nodes, ": This mushroom is poisonous")
         } else {
-          text <- paste0("Prediction with # of Nodes = ", input$nodes, ": This mushroom is edible")
+          text <- paste0("Prediction with CP = ", input$nodes, ": This mushroom is edible")
         }
       }
     }
