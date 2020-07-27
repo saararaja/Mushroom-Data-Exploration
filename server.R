@@ -63,8 +63,8 @@ knnFit <- train(class ~., data = Train, method = "knn",
 )
 
 #Fit Classification Tree on Train Set with Cross Validation Results
-# tree.fit <- tree(class ~., data = Train)
-# prune_tree <- cv.tree(tree.fit, FUN=prune.misclass)
+tree.fit <- tree(class ~., data = Train)
+prune_tree <- cv.tree(tree.fit, FUN=prune.misclass)
 
 ## Clustering
 #Create dissimilarity matrix using method = gower since categorical data
