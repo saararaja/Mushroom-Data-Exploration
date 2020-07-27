@@ -62,19 +62,19 @@ Test <- Test %>% select(-veil_type)
 #                 tuneLength = 10
 # )
 # 
-# #Fit Classification Tree on Train Set with Cross Validation Results
+#Fit Classification Tree on Train Set with Cross Validation Results
 # tree.fit <- tree(class ~., data = Train)
 # prune_tree <- cv.tree(tree.fit, FUN=prune.misclass)
-# 
-# ## Clustering
-# #Create dissimilarity matrix using method = gower since categorical data
-# gower.dist <- daisy(newData, metric = c("gower"))
-# 
-# #Agglomerative clustering
-# agg.clust <- hclust(gower.dist, method = "complete")
-# 
-# #Create dendrogram
-# dendro <- as.dendrogram(agg.clust)
+
+## Clustering
+#Create dissimilarity matrix using method = gower since categorical data
+gower.dist <- daisy(newData, metric = c("gower"))
+
+#Agglomerative clustering
+agg.clust <- hclust(gower.dist, method = "complete")
+
+#Create dendrogram
+dendro <- as.dendrogram(agg.clust)
 
 
 # Define server logic required to draw a histogram
@@ -283,39 +283,39 @@ shinyServer(function(input, output, session) {
   
   ############################## Clustering Page #################################
   
-  # #Create reactive color pallete
-  # colorPalette <- reactive({
-  #   if (input$color =="Neutral"){
-  #     col_list <- c("darkslategray", "darkslategray4", "darkslategray3", "gold3", "darkcyan", "cyan3",
-  #                   "darkolivegreen4", "darkolivegreen3", "darkseagreen4", "darkseagreen3")
-  #   } else {
-  #     col_list <- c("mediumorchid", "palevioletred3", "mediumaquamarine", "cornflowerblue", "yellowgreen",
-  #                   "seagreen3", "indianred2", "darkturquoise", "chartreuse3", "lightcoral")
-  #   }
-  # })
-  # 
-  # #Create Dendrogram
-  # output$Dendro <- renderPlot({
-  #   #Get Color Palette
-  #   colors <- colorPalette()
-  #   
-  #   #Create Specifications
-  #   dendro.col <- dendro %>%
-  #     set("branches_k_color", k = input$clust, value = colors[1:input$clust]) %>%
-  #     set("branches_lwd", 0.6) %>%
-  #     set("labels_colors", value = c("darkslategray")) %>%
-  #     set("labels_cex", 0.5)
-  #   
-  #   #Make the dendrogram
-  #   ggd1 <- as.ggdend(dendro.col)
-  #   
-  #   #Create the plot
-  #   ggplot(ggd1, theme = theme_minimal()) +
-  #     labs(x = "Num. observations", y = "Height", title = paste0("Dendrogram, k = ", input$clust)) +
-  #     theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 18))
-  #   
-  # })
-  # 
+  #Create reactive color pallete
+  colorPalette <- reactive({
+    if (input$color =="Neutral"){
+      col_list <- c("darkslategray", "darkslategray4", "darkslategray3", "gold3", "darkcyan", "cyan3",
+                    "darkolivegreen4", "darkolivegreen3", "darkseagreen4", "darkseagreen3")
+    } else {
+      col_list <- c("mediumorchid", "palevioletred3", "mediumaquamarine", "cornflowerblue", "yellowgreen",
+                    "seagreen3", "indianred2", "darkturquoise", "chartreuse3", "lightcoral")
+    }
+  })
+
+  #Create Dendrogram
+  output$Dendro <- renderPlot({
+    #Get Color Palette
+    colors <- colorPalette()
+
+    #Create Specifications
+    dendro.col <- dendro %>%
+      set("branches_k_color", k = input$clust, value = colors[1:input$clust]) %>%
+      set("branches_lwd", 0.6) %>%
+      set("labels_colors", value = c("darkslategray")) %>%
+      set("labels_cex", 0.5)
+
+    #Make the dendrogram
+    ggd1 <- as.ggdend(dendro.col)
+
+    #Create the plot
+    ggplot(ggd1, theme = theme_minimal()) +
+      labs(x = "Num. observations", y = "Height", title = paste0("Dendrogram, k = ", input$clust)) +
+      theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 18))
+
+  })
+
   ################################ Modeling Page #################################
   
   
