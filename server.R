@@ -53,15 +53,15 @@ Test <- newData[test_index, ]
 Train <- Train %>% select(-veil_type)
 Test <- Test %>% select(-veil_type)
 
-# ## Modeling
-# #Fit KNN on Train Set with Cross Validation Results
-# trctrl <- trainControl(method = "repeatedcv", number = 10)
-# 
-# knnFit <- train(class ~., data = Train, method = "knn",
-#                 trControl = trctrl,
-#                 tuneLength = 10
-# )
-# 
+## Modeling
+#Fit KNN on Train Set with Cross Validation Results
+trctrl <- trainControl(method = "repeatedcv", number = 10)
+
+knnFit <- train(class ~., data = Train, method = "knn",
+                trControl = trctrl,
+                tuneLength = 10
+)
+
 #Fit Classification Tree on Train Set with Cross Validation Results
 # tree.fit <- tree(class ~., data = Train)
 # prune_tree <- cv.tree(tree.fit, FUN=prune.misclass)
@@ -323,25 +323,25 @@ shinyServer(function(input, output, session) {
 
 
   #CV Plots
-  # output$cv <- renderPlot({
-  # 
-  #   #KNN Selection
-  #   if(input$model=="KNN"){
-  #     knn_plot <- plot(knnFit$results[,1], knnFit$results[,2], xlab = "K value",
-  #                      ylab = "Classification Accuracy",
-  #                      main = "Training Accuracy Based on Number of Neighbors",
-  #                      type = "o", col = "blue",
-  #                      panel.first = grid(lty = 1))
-  #   }
-  #   #Tree Selection
-  #   else {
-  #     tree_plot <- plot(prune_tree$size, prune_tree$dev, xlab = "Number of Nodes",
-  #                       ylab = "Classification Deviance",
-  #                       main = "Training Misclassification Based on Number of Nodes",
-  #                       type = "o", col = "blue",
-  #                       panel.first = grid(lty = 1))
-  #   }
-  # })
+  output$cv <- renderPlot({
+
+    #KNN Selection
+    if(input$model=="KNN"){
+      knn_plot <- plot(knnFit$results[,1], knnFit$results[,2], xlab = "K value",
+                       ylab = "Classification Accuracy",
+                       main = "Training Accuracy Based on Number of Neighbors",
+                       type = "o", col = "blue",
+                       panel.first = grid(lty = 1))
+    }
+    #Tree Selection
+    # else {
+    #   tree_plot <- plot(prune_tree$size, prune_tree$dev, xlab = "Number of Nodes",
+    #                     ylab = "Classification Deviance",
+    #                     main = "Training Misclassification Based on Number of Nodes",
+    #                     type = "o", col = "blue",
+    #                     panel.first = grid(lty = 1))
+    # }
+  })
 
 
   #Reactive KNN Fit
