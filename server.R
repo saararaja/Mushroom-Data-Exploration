@@ -320,11 +320,11 @@ shinyServer(function(input, output, session) {
   
   
   
-  # 
-  # 
-  # #CV Plots
+
+
+  #CV Plots
   # output$cv <- renderPlot({
-  #   
+  # 
   #   #KNN Selection
   #   if(input$model=="KNN"){
   #     knn_plot <- plot(knnFit$results[,1], knnFit$results[,2], xlab = "K value",
@@ -342,129 +342,129 @@ shinyServer(function(input, output, session) {
   #                       panel.first = grid(lty = 1))
   #   }
   # })
-  # 
-  # 
-  # #Reactive KNN Fit
-  # KNN_Fit <- reactive({
-  #   knnctrl <- trainControl(method = "none")
-  #   knnFit <- train(class ~., data = Train, method = "knn",
-  #                   trControl = knnctrl, 
-  #                   tuneGrid=data.frame(k=input$K)
-  #   )
-  #   knnFit
-  # })
-  # 
-  # #Reactive Tree Fit
-  # Tree_Fit <- reactive({
-  #   tree.fit2 <- prune.misclass(tree.fit, best = input$nodes)
-  # })
-  # 
-  # #Reactive KNN Prediction
-  # KNN_Pred <- reactive({
-  #   knnFit <- KNN_Fit()
-  #   #Predict on the test data set based on model fit
-  #   knnPred <- predict(knnFit, newdata = Test)
-  # })
-  # 
-  # #Reactive Tree Prediction
-  # Tree_Pred <- reactive({
-  #   treeFit <- Tree_Fit()
-  #   #Predict on the test data set based on model fit
-  #   treePred <- predict(treeFit, newdata = Test, type="class")
-  # })
-  # 
-  # #Confusion Matrix
-  # output$confusion <- renderPrint({
-  #   #KNN 
-  #   if(input$model=="KNN"){
-  #     knnPred <- KNN_Pred()
-  #     #Create confusion matrix
-  #     table(knnPred, Test$class)
-  #   }
-  #   #Tree
-  #   else{
-  #     treePred <- Tree_Pred()
-  #     #Create confusion matrix
-  #     table(treePred, Test$class)
-  #   }
-  # })
-  # 
-  # #Text
-  # output$acc <- renderText({
-  #   #KNN
-  #   if(input$model=="KNN"){
-  #     knnPred <- KNN_Pred()
-  #     paste0("With K = ", input$K, ", the Misclassification Error rate is: ", round(mean(knnPred != Test$class),5), ".") 
-  #   }
-  #   #Tree
-  #   else {
-  #     treePred <- Tree_Pred()
-  #     paste0("With # Nodes = ", input$nodes, ", the Misclassification Error rate is: ", round(mean(treePred != Test$class),5), ".") 
-  #   }
-  # })
-  # 
-  # #Make Prediction
-  # output$outcome <- renderText({
-  #   if(input$new){
-  #     #Make the new data frame
-  #     Temp <- data.frame(
-  #       cap_shape = input$cap_shape,
-  #       cap_surface = input$cap_surface,
-  #       cap_color = input$cap_color,
-  #       bruises = input$bruises,
-  #       odor = input$odor,
-  #       gill_attachment = input$gill_attachment,
-  #       gill_spacing = input$gill_spacing,
-  #       gill_size = input$gill_size,
-  #       gill_color = input$gill_color,
-  #       stalk_shape = input$stalk_shape,
-  #       stalk_root = input$stalk_root,
-  #       stalk_surface_above_ring = input$stalk_surface_above_ring,
-  #       stalk_surface_below_ring = input$stalk_surface_below_ring,
-  #       stalk_color_above_ring = input$stalk_color_above_ring,
-  #       stalk_color_below_ring = input$stalk_color_below_ring,
-  #       veil_color = input$veil_color,
-  #       ring_number = input$ring_number,
-  #       ring_type = input$ring_type,
-  #       spore_print_color = input$spore_print_color,
-  #       population = input$population,
-  #       habitat = input$habitat
-  #     )
-  #     #KNN
-  #     if(input$model=="KNN"){
-  #       #Bring in the KNN fit
-  #       knnFit <- KNN_Fit()
-  #       #Predict on the user defined data set based on model fit
-  #       knnPred <- predict(knnFit, newdata = Temp)
-  #       #Text
-  #       if (knnPred[1]=='e'){
-  #         text <- paste0("Prediction with K = ", input$K, ": This mushroom is edible")
-  #       } else {
-  #         text <- paste0("Prediction with K = ", input$K, ": This mushroom is poisonous")
-  #       }
-  #     }
-  #     #Tree
-  #     else {
-  #       #Bring in the Tree fit
-  #       treeFit <- Tree_Fit()
-  #       # Make some adjustmusts to Temp column types
-  #       col_names2 <- names(Temp)
-  #       Temp[,col_names2] <- lapply(Temp[,col_names2], factor)
-  #       #Predict on the user defined data set based on model fit
-  #       treePred <- predict(treeFit, newdata = Temp, type="class")
-  #       #Text
-  #       if (treePred[1]=='p'){
-  #         text <- paste0("Prediction with # of Nodes = ", input$nodes, ": This mushroom is poisonous")
-  #       } else {
-  #         text <- paste0("Prediction with # of Nodes = ", input$nodes, ": This mushroom is edible")
-  #       }
-  #     }
-  #   }
-  # })
-  # 
-  # 
-  # 
-  # 
+
+
+  #Reactive KNN Fit
+  KNN_Fit <- reactive({
+    knnctrl <- trainControl(method = "none")
+    knnFit <- train(class ~., data = Train, method = "knn",
+                    trControl = knnctrl,
+                    tuneGrid=data.frame(k=input$K)
+    )
+    knnFit
+  })
+
+  #Reactive Tree Fit
+  Tree_Fit <- reactive({
+    tree.fit2 <- prune.misclass(tree.fit, best = input$nodes)
+  })
+
+  #Reactive KNN Prediction
+  KNN_Pred <- reactive({
+    knnFit <- KNN_Fit()
+    #Predict on the test data set based on model fit
+    knnPred <- predict(knnFit, newdata = Test)
+  })
+
+  #Reactive Tree Prediction
+  Tree_Pred <- reactive({
+    treeFit <- Tree_Fit()
+    #Predict on the test data set based on model fit
+    treePred <- predict(treeFit, newdata = Test, type="class")
+  })
+
+  #Confusion Matrix
+  output$confusion <- renderPrint({
+    #KNN
+    if(input$model=="KNN"){
+      knnPred <- KNN_Pred()
+      #Create confusion matrix
+      table(knnPred, Test$class)
+    }
+    #Tree
+    else{
+      treePred <- Tree_Pred()
+      #Create confusion matrix
+      table(treePred, Test$class)
+    }
+  })
+
+  #Text
+  output$acc <- renderText({
+    #KNN
+    if(input$model=="KNN"){
+      knnPred <- KNN_Pred()
+      paste0("With K = ", input$K, ", the Misclassification Error rate is: ", round(mean(knnPred != Test$class),5), ".")
+    }
+    #Tree
+    else {
+      treePred <- Tree_Pred()
+      paste0("With # Nodes = ", input$nodes, ", the Misclassification Error rate is: ", round(mean(treePred != Test$class),5), ".")
+    }
+  })
+
+  #Make Prediction
+  output$outcome <- renderText({
+    if(input$new){
+      #Make the new data frame
+      Temp <- data.frame(
+        cap_shape = input$cap_shape,
+        cap_surface = input$cap_surface,
+        cap_color = input$cap_color,
+        bruises = input$bruises,
+        odor = input$odor,
+        gill_attachment = input$gill_attachment,
+        gill_spacing = input$gill_spacing,
+        gill_size = input$gill_size,
+        gill_color = input$gill_color,
+        stalk_shape = input$stalk_shape,
+        stalk_root = input$stalk_root,
+        stalk_surface_above_ring = input$stalk_surface_above_ring,
+        stalk_surface_below_ring = input$stalk_surface_below_ring,
+        stalk_color_above_ring = input$stalk_color_above_ring,
+        stalk_color_below_ring = input$stalk_color_below_ring,
+        veil_color = input$veil_color,
+        ring_number = input$ring_number,
+        ring_type = input$ring_type,
+        spore_print_color = input$spore_print_color,
+        population = input$population,
+        habitat = input$habitat
+      )
+      #KNN
+      if(input$model=="KNN"){
+        #Bring in the KNN fit
+        knnFit <- KNN_Fit()
+        #Predict on the user defined data set based on model fit
+        knnPred <- predict(knnFit, newdata = Temp)
+        #Text
+        if (knnPred[1]=='e'){
+          text <- paste0("Prediction with K = ", input$K, ": This mushroom is edible")
+        } else {
+          text <- paste0("Prediction with K = ", input$K, ": This mushroom is poisonous")
+        }
+      }
+      #Tree
+      else {
+        #Bring in the Tree fit
+        treeFit <- Tree_Fit()
+        # Make some adjustmusts to Temp column types
+        col_names2 <- names(Temp)
+        Temp[,col_names2] <- lapply(Temp[,col_names2], factor)
+        #Predict on the user defined data set based on model fit
+        treePred <- predict(treeFit, newdata = Temp, type="class")
+        #Text
+        if (treePred[1]=='p'){
+          text <- paste0("Prediction with # of Nodes = ", input$nodes, ": This mushroom is poisonous")
+        } else {
+          text <- paste0("Prediction with # of Nodes = ", input$nodes, ": This mushroom is edible")
+        }
+      }
+    }
+  })
+
+
+
+
   
   
   
